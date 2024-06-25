@@ -1,0 +1,13 @@
+targets:
+  $default:
+    builders:
+      class_namer:
+        enabled: true
+
+builders:
+  nameof:
+    import: "package:class_namer/class_namer.dart"
+    builder_factories: ["classNamer"]
+    build_extensions: { ".dart": [".names.dart"] }
+    auto_apply: dependents
+    build_to: source
