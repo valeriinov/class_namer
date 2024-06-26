@@ -1,18 +1,13 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:class_namer/src/class_namer_processor.dart';
-import 'package:class_namer/src/class_namer_visitor.dart';
-import 'package:class_namer/src/model/class_namer_options.dart';
-import 'package:class_namer/src/model/class_namer_options_dto.dart';
-import 'package:class_namer/src/utils/ext/constant_reader/class_namer_options_mapper.dart';
-import 'package:class_namer/src/utils/ext/options_mapper.dart';
+import 'package:class_namer/src/utils/service_provider.dart';
 import 'package:class_namer_annotation/class_namer_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
 class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
-  final ClassNamerOptionsDto _initOptionsDto;
+  final ServiceProvider _serviceProvider;
 
-  ClassNamerGenerator(this._initOptionsDto);
+  ClassNamerGenerator(this._serviceProvider);
 
   @override
   generateForAnnotatedElement(
@@ -21,23 +16,17 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
       throw UnsupportedError("This is not a class (or mixin)!");
     }
 
-    final options = _getOptions(annotation);
+    final optionsHandler = _serviceProvider.getOptionsHandler();
 
-    final visitor = ClassNamerVisitor(options);
+    final options = optionsHandler.getOptions(annotation);
+
+    final visitor = _serviceProvider.createClassNamerVisitor(options);
 
     element.visitChildren(visitor);
 
-    final code =
-        ClassNamerProcessor(visitor: visitor, options: options).process();
+    final processor = _serviceProvider.createCodeProcessor(
+        visitor: visitor, options: options);
 
-    return code;
-  }
-
-  ClassNamerOptions _getOptions(ConstantReader annotation) {
-    final annotationOptionsDto = annotation.toClassNamerOptionsDto();
-
-    final optionsDto = _initOptionsDto.copyWithOptionsDto(annotationOptionsDto);
-
-    return optionsDto.toClassNamerOptions();
+    return processor.generateCode();
   }
 }

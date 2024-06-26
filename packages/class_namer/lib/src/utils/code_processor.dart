@@ -4,17 +4,22 @@ import 'package:class_namer/src/model/element_data.dart';
 import 'package:class_namer/src/model/property_data.dart';
 import 'package:class_namer/src/utils/ext/string/element_data_handler.dart';
 
-class ClassNamerProcessor {
+abstract interface class CodeProcessor {
+  String generateCode();
+}
+
+class ImplCodeProcessor implements CodeProcessor {
   final ClassNamerOptions _options;
   final ClassNamerVisitor _visitor;
   StringBuffer _buffer = StringBuffer();
 
-  ClassNamerProcessor(
+  ImplCodeProcessor(
       {required ClassNamerVisitor visitor, required ClassNamerOptions options})
       : _options = options,
         _visitor = visitor;
 
-  String process() {
+  @override
+  String generateCode() {
     _buffer = StringBuffer();
 
     return _generateCode();

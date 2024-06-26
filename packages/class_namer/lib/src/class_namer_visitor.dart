@@ -8,19 +8,36 @@ import 'package:class_namer/src/utils/ext/string/element_data_handler.dart';
 import 'package:class_namer/src/utils/ext/string/utility_name_validator.dart';
 import 'package:class_namer_annotation/class_namer_annotation.dart';
 
-class ClassNamerVisitor extends SimpleElementVisitor<void> {
+abstract class ClassNamerVisitor extends SimpleElementVisitor<void> {
+  String get className;
+
+  Map<String, ElementData> get constructors;
+
+  Map<String, ElementData> get fields;
+
+  Map<String, ElementData> get functions;
+
+  Map<String, ElementData> get properties;
+}
+
+class ImplClassNamerVisitor extends ClassNamerVisitor {
   final ClassNamerOptions _options;
 
   String _className = '';
 
+  @override
   String get className => _className;
 
+  @override
   final constructors = <String, ElementData>{};
+  @override
   final fields = <String, ElementData>{};
+  @override
   final functions = <String, ElementData>{};
+  @override
   final properties = <String, ElementData>{};
 
-  ClassNamerVisitor(this._options);
+  ImplClassNamerVisitor(this._options);
 
   @override
   void visitConstructorElement(ConstructorElement element) {
