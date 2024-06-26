@@ -7,6 +7,7 @@ import 'package:class_namer/src/utils/ext/string/element_data_handler.dart';
 class ClassNamerProcessor {
   final ClassNamerOptions _options;
   final ClassNamerVisitor _visitor;
+  StringBuffer _buffer = StringBuffer();
 
   ClassNamerProcessor(
       {required ClassNamerVisitor visitor, required ClassNamerOptions options})
@@ -14,64 +15,81 @@ class ClassNamerProcessor {
         _visitor = visitor;
 
   String process() {
-    return _generateNames();
+    _buffer = StringBuffer();
+
+    return _generateCode();
   }
 
-  String _generateNames() {
-    StringBuffer buffer = StringBuffer();
-
+  String _generateCode() {
     final classContainerName = '${_visitor.className}Names';
 
-    buffer.writeln(
+    _buffer.writeln(
         '/// Container for names of elements belonging to the [${_visitor.className}] class');
-    buffer.writeln('class $classContainerName {');
+    _buffer.writeln('class $classContainerName {');
 
-    buffer.writeln('$classContainerName._();');
-    buffer.writeln();
+    _writeConstructor(classContainerName);
 
+    _writeNames();
+
+    _buffer.writeln('}');
+
+    return _buffer.toString();
+  }
+
+  void _writeConstructor(String classContainerName) {
+    _buffer.writeln('$classContainerName._();');
+    _buffer.writeln();
+  }
+
+  void _writeNames() {
+    _writeClassName();
+
+    final namesList = _generateNames();
+
+    for (final codeLines in namesList) {
+      _writeCodeLines(codeLines);
+    }
+  }
+
+  void _writeClassName() {
     final className = 'final String className = \'${_visitor.className}\';';
 
+    if (!_options.ignoreClassName) _buffer.writeln(className);
+  }
+
+  List<Iterable<String>> _generateNames() {
     final constructorNames =
         _getCodeParts('constructor', _visitor.constructors.values);
 
     final fieldNames = _getCodeParts('field', _visitor.fields.values);
 
+    final propertyNames = _getCodeParts('property', _visitor.properties.values);
+
     final functionNames = _getCodeParts('function', _visitor.functions.values);
 
-    final propertyNames = _getFilteredNames(_visitor.properties.values).map(
-        (prop) =>
-            'final String property${(prop as PropertyData).propertyPrefix}${prop.name.capitalize().privatize()} = \'${prop.name}\';');
-
-    void writeCode(Iterable<String> codeLines) {
-      if (codeLines.isNotEmpty) {
-        buffer.writeln();
-        buffer.writeln(join(codeLines));
-      }
-    }
-
-    if (!_options.ignoreClassName) buffer.writeln(className);
-
-    for (var codeLines in [
-      constructorNames,
-      fieldNames,
-      propertyNames,
-      functionNames
-    ]) {
-      writeCode(codeLines);
-    }
-
-    buffer.writeln('}');
-
-    return buffer.toString();
+    return [constructorNames, fieldNames, propertyNames, functionNames];
   }
 
   Iterable<String> _getCodeParts(
       String elementType, Iterable<ElementData> elements) {
-    return _getFilteredNames(elements).map((element) =>
-        'final String $elementType${element.name.capitalize().privatize()} = \'${element.name}\';');
+    final filteredNames = _getFilteredNames(elements);
+
+    return filteredNames.map((elData) {
+      final propPrefix = elData is PropertyData ? elData.propertyPrefix : '';
+
+      return 'final String $elementType$propPrefix'
+          '${elData.name.capitalize().privatize()} = \'${elData.name}\';';
+    });
   }
 
   Iterable<ElementData> _getFilteredNames(Iterable<ElementData> dataList) {
     return dataList.where((data) => !data.isPrivate && !data.isIgnore);
+  }
+
+  void _writeCodeLines(Iterable<String> codeLines) {
+    if (codeLines.isNotEmpty) {
+      _buffer.writeln();
+      _buffer.writeln(join(codeLines));
+    }
   }
 }
