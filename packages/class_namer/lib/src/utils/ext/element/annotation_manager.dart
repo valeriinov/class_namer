@@ -11,7 +11,7 @@ extension AnnotationManager on Element {
   /// Whether the element has an annotation of the specified [type].
   ///
   /// The [type] parameter specifies the type of the annotation to look for.
-  bool hasAnnotation(final Type type) {
+  bool hasAnnotation(Type type) {
     return _typeChecker(type).hasAnnotationOfExact(this);
   }
 
@@ -21,7 +21,7 @@ extension AnnotationManager on Element {
   ///
   /// Returns a [DartObject] representing the annotation if found,
   /// otherwise `null`.
-  DartObject? getAnnotation(final Type type) {
+  DartObject? getAnnotation(Type type) {
     return _typeChecker(type).firstAnnotationOfExact(this);
   }
 }

@@ -124,9 +124,11 @@ packages:
   class_namer_annotation:
     dependency: "direct main"
     description:
-      path: "../class_namer_annotation"
-      relative: true
-    source: path
+      path: "packages/class_namer_annotation"
+      ref: HEAD
+      resolved-ref: "6e8c86a9c431a1c835ec03becfe0f4b7a1e38d1b"
+      url: "https://git.urancompany.com/v.novykov/class_namer.git"
+    source: git
     version: "0.0.1"
   clock:
     dependency: transitive
