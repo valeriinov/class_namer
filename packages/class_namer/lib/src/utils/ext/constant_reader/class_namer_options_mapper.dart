@@ -1,8 +1,8 @@
-import 'package:class_namer/src/model/class_namer_options.dart';
+import 'package:class_namer/src/model/class_namer_options_dto.dart';
 import 'package:source_gen/source_gen.dart';
 
 extension ClassNamerOptionsMapper on ConstantReader {
-  ClassNamerOptions toClassNamerOptions() {
+  ClassNamerOptionsDto toClassNamerOptionsDto() {
     final ignoreUtilities = _getOptionValue('ignoreUtilities');
     final ignoreClassName = _getOptionValue('ignoreClassName');
     final ignoreConstructors = _getOptionValue('ignoreConstructors');
@@ -10,9 +10,7 @@ extension ClassNamerOptionsMapper on ConstantReader {
     final ignoreFields = _getOptionValue('ignoreFields');
     final ignoreProperties = _getOptionValue('ignoreProperties');
 
-    const options = ClassNamerOptions();
-
-    return options.copyWith(
+    return ClassNamerOptionsDto(
         ignoreUtilities: ignoreUtilities,
         ignoreClassName: ignoreClassName,
         ignoreConstructors: ignoreConstructors,
@@ -22,6 +20,12 @@ extension ClassNamerOptionsMapper on ConstantReader {
   }
 
   bool? _getOptionValue(String field) {
-    return read(field).objectValue.toBoolValue();
+    final fieldReader = peek(field);
+
+    if (fieldReader != null && !fieldReader.isNull) {
+      return fieldReader.objectValue.toBoolValue();
+    }
+
+    return null;
   }
 }

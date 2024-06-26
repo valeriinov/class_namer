@@ -1,20 +1,20 @@
 library class_namer_annotation;
 
 class ClassNamer {
-  final bool ignoreUtilities;
-  final bool ignoreClassName;
-  final bool ignoreConstructors;
-  final bool ignoreMethods;
-  final bool ignoreProperties;
-  final bool ignoreFields;
+  final bool? ignoreUtilities;
+  final bool? ignoreClassName;
+  final bool? ignoreConstructors;
+  final bool? ignoreMethods;
+  final bool? ignoreProperties;
+  final bool? ignoreFields;
 
   const ClassNamer(
-      {this.ignoreUtilities = true,
-      this.ignoreClassName = true,
-      this.ignoreConstructors = true,
-      this.ignoreMethods = true,
-      this.ignoreFields = false,
-      this.ignoreProperties = false});
+      {this.ignoreUtilities,
+      this.ignoreClassName,
+      this.ignoreConstructors,
+      this.ignoreMethods,
+      this.ignoreFields,
+      this.ignoreProperties});
 }
 
 class ClassNamerIgnore {

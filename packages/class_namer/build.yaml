@@ -5,7 +5,7 @@ targets:
         enabled: true
 
 builders:
-  nameof:
+  class_namer:
     import: "package:class_namer/class_namer.dart"
     builder_factories: ["classNamer"]
     build_extensions: { ".dart": [".names.dart"] }
