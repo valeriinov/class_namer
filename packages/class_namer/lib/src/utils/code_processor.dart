@@ -4,7 +4,11 @@ import 'package:class_namer/src/model/element_data.dart';
 import 'package:class_namer/src/model/property_data.dart';
 import 'package:class_namer/src/utils/ext/string/element_data_handler.dart';
 
+/// An interface for processing code based on class elements and their names.
 abstract interface class CodeProcessor {
+  /// Generates the code based on the visited class elements.
+  ///
+  /// Returns the generated code as a [String].
   String generateCode();
 }
 

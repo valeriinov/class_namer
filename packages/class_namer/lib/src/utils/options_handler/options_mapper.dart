@@ -2,7 +2,13 @@ import 'package:class_namer/src/model/class_namer_options.dart';
 import 'package:class_namer/src/model/class_namer_options_dto.dart';
 import 'package:source_gen/source_gen.dart';
 
+/// A class responsible for mapping configuration options
 class OptionsMapper {
+  /// Maps configuration options from [ConstantReader] to [ClassNamerOptionsDto].
+  ///
+  /// The [reader] parameter is used to read the annotation values.
+  ///
+  /// Returns a [ClassNamerOptionsDto] containing the mapped options.
   ClassNamerOptionsDto mapConstantReaderToClassNamerOptionsDto(
       ConstantReader reader) {
     final ignoreUtilities = _getOptionValue('ignoreUtilities', reader);
@@ -31,6 +37,13 @@ class OptionsMapper {
     return null;
   }
 
+  /// Maps [ClassNamerOptionsDto] to [ClassNamerOptions],
+  /// applying default values where necessary.
+  ///
+  /// The [dto] parameter is the data transfer object
+  /// containing the configuration options.
+  ///
+  /// Returns a [ClassNamerOptions] instance with the mapped options.
   ClassNamerOptions mapClassNameOptionsDtoToClassNameOptions(
       ClassNamerOptionsDto dto) {
     const defaultOptions = ClassNamerOptions();

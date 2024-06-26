@@ -8,15 +8,21 @@ import 'package:class_namer/src/utils/ext/string/element_data_handler.dart';
 import 'package:class_namer/src/utils/ext/string/utility_name_validator.dart';
 import 'package:class_namer_annotation/class_namer_annotation.dart';
 
+/// An abstract class that defines the structure for visiting class elements
+/// and extracting their data.
 abstract class ClassNamerVisitor extends SimpleElementVisitor<void> {
   String get className;
 
+  /// A map of constructor elements with their corresponding [ElementData].
   Map<String, ElementData> get constructors;
 
+  /// A map of field elements with their corresponding [ElementData].
   Map<String, ElementData> get fields;
 
+  /// A map of function elements with their corresponding [ElementData].
   Map<String, ElementData> get functions;
 
+  /// A map of property elements with their corresponding [ElementData].
   Map<String, ElementData> get properties;
 }
 

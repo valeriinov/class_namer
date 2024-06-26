@@ -4,6 +4,8 @@ import 'package:class_namer/src/utils/service_provider.dart';
 import 'package:class_namer_annotation/class_namer_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
+/// A generator that processes annotated elements with [ClassNamer] and generates
+/// corresponding code based on the provided options.
 class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
   final ServiceProvider _serviceProvider;
 
