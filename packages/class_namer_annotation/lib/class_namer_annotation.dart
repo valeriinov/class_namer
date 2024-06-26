@@ -1,6 +1,7 @@
 library class_namer_annotation;
 
 class ClassNamer {
+  final bool ignoreUtilities;
   final bool ignoreClassName;
   final bool ignoreConstructors;
   final bool ignoreMethods;
@@ -8,7 +9,8 @@ class ClassNamer {
   final bool ignoreFields;
 
   const ClassNamer(
-      {this.ignoreClassName = true,
+      {this.ignoreUtilities = true,
+      this.ignoreClassName = true,
       this.ignoreConstructors = true,
       this.ignoreMethods = true,
       this.ignoreFields = false,

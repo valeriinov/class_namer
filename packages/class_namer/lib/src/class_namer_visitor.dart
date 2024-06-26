@@ -3,7 +3,10 @@ import 'package:analyzer/dart/element/visitor.dart';
 import 'package:class_namer/src/model/class_namer_options.dart';
 import 'package:class_namer/src/model/element_data.dart';
 import 'package:class_namer/src/model/property_data.dart';
+import 'package:class_namer/src/utils/ext/element/annotation_manager.dart';
 import 'package:class_namer/src/utils/ext/string/element_data_handler.dart';
+import 'package:class_namer/src/utils/ext/string/utility_name_validator.dart';
+import 'package:class_namer_annotation/class_namer_annotation.dart';
 
 class ClassNamerVisitor extends SimpleElementVisitor<void> {
   final ClassNamerOptions _options;
@@ -26,7 +29,7 @@ class ClassNamerVisitor extends SimpleElementVisitor<void> {
     _className = returnType.cleanTypeFromServiceSymbols();
 
     constructors[element.name] =
-        _getElementData(element, isIgnore: _options.ignoreConstructors);
+        _getElementData(element, isIgnoreOption: _options.ignoreConstructors);
   }
 
   @override
@@ -34,7 +37,7 @@ class ClassNamerVisitor extends SimpleElementVisitor<void> {
     if (element.isSynthetic) return;
 
     fields[element.name] =
-        _getElementData(element, isIgnore: _options.ignoreFields);
+        _getElementData(element, isIgnoreOption: _options.ignoreFields);
   }
 
   @override
@@ -42,25 +45,33 @@ class ClassNamerVisitor extends SimpleElementVisitor<void> {
     if (element.isSynthetic) return;
 
     properties[element.name] = PropertyData.fromElementData(
-        _getElementData(element, isIgnore: _options.ignoreProperties),
+        _getElementData(element, isIgnoreOption: _options.ignoreProperties),
         isSetter: element.isSetter);
   }
 
   @override
   void visitMethodElement(MethodElement element) {
     functions[element.name] =
-        _getElementData(element, isIgnore: _options.ignoreMethods);
+        _getElementData(element, isIgnoreOption: _options.ignoreMethods);
   }
 
-  ElementData _getElementData(Element element, {bool isIgnore = false}) {
+  ElementData _getElementData(Element element, {required bool isIgnoreOption}) {
     if (element.name == null) {
       throw UnsupportedError('Element does not have a name!');
     }
 
-    final isPrivate = element.name!.startsWith('_');
-
     String? name = element.name!.cleanNameFromServiceSymbols();
 
+    final isPrivate = element.name!.startsWith('_');
+    final isIgnore = _isIgnore(element, name, isIgnoreOption);
+
     return ElementData(name: name, isPrivate: isPrivate, isIgnore: isIgnore);
+  }
+
+  bool _isIgnore(Element element, String name, bool isIgnoreOption) {
+    return element.hasAnnotation(ClassNamerIgnore) ||
+        name.isEmpty ||
+        (_options.ignoreUtilities && name.isUtilityName) ||
+        isIgnoreOption;
   }
 }
