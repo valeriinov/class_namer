@@ -10,6 +10,14 @@ extension UtilityNameValidator on String {
   /// - `nameof`
   /// - `toMap`
   /// - `fromMap`
+  /// - `hashCode`
+  /// - `runtimeType`
+  /// - `toString`
+  /// - `noSuchMethod`
+  /// - `hash`
+  /// - `hashAll`
+  /// - `hashAllUnordered`
+  /// - `toJsonString`
   ///
   /// Returns `true` if the string is one of the common utility names,
   /// otherwise returns `false`.
@@ -19,6 +27,14 @@ extension UtilityNameValidator on String {
         this == 'fromJson' ||
         this == 'nameof' ||
         this == 'toMap' ||
-        this == 'fromMap';
+        this == 'fromMap' ||
+        this == 'hashCode' ||
+        this == 'runtimeType' ||
+        this == 'toString' ||
+        this == 'noSuchMethod' ||
+        this == 'hash' ||
+        this == 'hashAll' ||
+        this == 'hashAllUnordered' ||
+        this == 'toJsonString';
   }
 }

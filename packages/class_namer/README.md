@@ -69,6 +69,10 @@ main() {
 
 Configuration Options:
 
+- `includeMixinsMembers`: Whether to include members from mixins in the generated class names.
+  Default is true.
+- `includeSuperMembers`: Whether to include members from superclasses in the generated class names.
+  Default is true.
 - `ignoreUtilities`: Whether to ignore utility functions (e.g., copyWith, toJson). Default is true.
 - `ignoreClassName`: Whether to ignore the class name. Default is true.
 - `ignoreConstructors`: Whether to ignore constructors. Default is true.
@@ -143,6 +147,8 @@ targets:
     builders:
       class_namer:
         options:
+          includeMixinsMembers: true
+          includeSuperMembers: true
           ignoreUtilities: false
           ignoreConstructors: false
           ignoreClassName: false

@@ -25,6 +25,12 @@ abstract class ClassNamerVisitor extends SimpleElementVisitor<void> {
 
   /// A map of property elements with their corresponding [ElementData].
   Map<String, ElementData> get properties;
+
+  /// Visits and processes mixins and super types of the given class element.
+  ///
+  /// The [element] parameter specifies the class element whose mixins and
+  /// super types should be visited and processed.
+  void visitMixinsAnsSuperTypes(ClassElement element);
 }
 
 class ImplClassNamerVisitor extends ClassNamerVisitor {
@@ -43,6 +49,45 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   final properties = <String, ElementData>{};
 
   ImplClassNamerVisitor(this._options, this.className);
+
+  @override
+  void visitMixinsAnsSuperTypes(ClassElement element) {
+    _visitMixinsAndSupertypes(element);
+  }
+
+  void _visitMixinsAndSupertypes(InterfaceElement element) {
+    if (_options.includeMixinsMembers) _visitMixins(element);
+
+    if (_options.includeSuperMembers) _visitSuperTypes(element);
+  }
+
+  void _visitMixins(InterfaceElement element) {
+    for (final mixin in element.mixins) {
+      _visitClassElement(mixin.element);
+    }
+  }
+
+  void _visitSuperTypes(InterfaceElement element) {
+    final superClass = element.supertype?.element;
+    if (superClass != null && superClass is ClassElement) {
+      _visitMixinsAndSupertypes(superClass);
+      _visitClassElement(superClass);
+    }
+  }
+
+  void _visitClassElement(InterfaceElement element) {
+    for (final field in element.fields) {
+      visitFieldElement(field);
+    }
+
+    for (final accessor in element.accessors) {
+      visitPropertyAccessorElement(accessor);
+    }
+
+    for (final method in element.methods) {
+      visitMethodElement(method);
+    }
+  }
 
   @override
   void visitConstructorElement(ConstructorElement element) {

@@ -1,4 +1,6 @@
 class ClassNamerOptions {
+  final bool includeMixinsMembers;
+  final bool includeSuperMembers;
   final bool ignoreUtilities;
   final bool ignoreClassName;
   final bool ignoreConstructors;
@@ -7,7 +9,9 @@ class ClassNamerOptions {
   final bool ignoreFields;
 
   const ClassNamerOptions(
-      {this.ignoreUtilities = true,
+      {this.includeMixinsMembers = true,
+      this.includeSuperMembers = true,
+      this.ignoreUtilities = true,
       this.ignoreClassName = true,
       this.ignoreConstructors = true,
       this.ignoreMethods = true,
@@ -15,6 +19,8 @@ class ClassNamerOptions {
       this.ignoreProperties = false});
 
   ClassNamerOptions copyWith({
+    bool? includeMixinsMembers,
+    bool? includeSuperMembers,
     bool? ignoreUtilities,
     bool? ignoreClassName,
     bool? ignoreConstructors,
@@ -23,6 +29,8 @@ class ClassNamerOptions {
     bool? ignoreFields,
   }) {
     return ClassNamerOptions(
+      includeMixinsMembers: includeMixinsMembers ?? this.includeMixinsMembers,
+      includeSuperMembers: includeSuperMembers ?? this.includeSuperMembers,
       ignoreUtilities: ignoreUtilities ?? this.ignoreUtilities,
       ignoreClassName: ignoreClassName ?? this.ignoreClassName,
       ignoreConstructors: ignoreConstructors ?? this.ignoreConstructors,

@@ -19,6 +19,16 @@ library class_namer_annotation;
 /// }
 /// ```
 class ClassNamer {
+  /// Whether to include members from mixins in the generated class names.
+  ///
+  /// The default value is `true`.
+  final bool? includeMixinsMembers;
+
+  /// Whether to include members from superclasses in the generated class names.
+  ///
+  /// The default value is `true`.
+  final bool? includeSuperMembers;
+
   /// Whether to ignore utility functions (e.g., `copyWith`, `toJson`).
   ///
   /// The default value is `true`.
@@ -51,7 +61,9 @@ class ClassNamer {
 
   /// Creates an instance of [ClassNamer] with the given configuration options.
   const ClassNamer(
-      {this.ignoreUtilities,
+      {this.includeMixinsMembers,
+      this.includeSuperMembers,
+      this.ignoreUtilities,
       this.ignoreClassName,
       this.ignoreConstructors,
       this.ignoreMethods,

@@ -11,6 +11,9 @@ class OptionsMapper {
   /// Returns a [ClassNamerOptionsDto] containing the mapped options.
   ClassNamerOptionsDto mapConstantReaderToClassNamerOptionsDto(
       ConstantReader reader) {
+    final includeMixinsMembers =
+        _getOptionValue('includeMixinsMembers', reader);
+    final includeSuperMembers = _getOptionValue('includeSuperMembers', reader);
     final ignoreUtilities = _getOptionValue('ignoreUtilities', reader);
     final ignoreClassName = _getOptionValue('ignoreClassName', reader);
     final ignoreConstructors = _getOptionValue('ignoreConstructors', reader);
@@ -19,6 +22,8 @@ class OptionsMapper {
     final ignoreProperties = _getOptionValue('ignoreProperties', reader);
 
     return ClassNamerOptionsDto(
+        includeMixinsMembers: includeMixinsMembers,
+        includeSuperMembers: includeSuperMembers,
         ignoreUtilities: ignoreUtilities,
         ignoreClassName: ignoreClassName,
         ignoreConstructors: ignoreConstructors,
@@ -49,6 +54,8 @@ class OptionsMapper {
     const defaultOptions = ClassNamerOptions();
 
     return defaultOptions.copyWith(
+        includeMixinsMembers: dto.includeMixinsMembers,
+        includeSuperMembers: dto.includeSuperMembers,
         ignoreUtilities: dto.ignoreUtilities,
         ignoreClassName: dto.ignoreClassName,
         ignoreConstructors: dto.ignoreConstructors,

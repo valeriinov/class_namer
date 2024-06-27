@@ -1,4 +1,6 @@
 class ClassNamerOptionsDto {
+  final bool? includeMixinsMembers;
+  final bool? includeSuperMembers;
   final bool? ignoreUtilities;
   final bool? ignoreClassName;
   final bool? ignoreConstructors;
@@ -7,7 +9,9 @@ class ClassNamerOptionsDto {
   final bool? ignoreFields;
 
   const ClassNamerOptionsDto(
-      {this.ignoreUtilities,
+      {this.includeMixinsMembers,
+      this.includeSuperMembers,
+      this.ignoreUtilities,
       this.ignoreClassName,
       this.ignoreConstructors,
       this.ignoreMethods,
@@ -16,6 +20,8 @@ class ClassNamerOptionsDto {
 
   factory ClassNamerOptionsDto.fromMap(Map<String, dynamic> map) {
     return ClassNamerOptionsDto(
+      includeMixinsMembers: map['includeMixinsMembers'],
+      includeSuperMembers: map['includeSuperMembers'],
       ignoreUtilities: map['ignoreUtilities'],
       ignoreClassName: map['ignoreClassName'],
       ignoreConstructors: map['ignoreConstructors'],
@@ -27,6 +33,8 @@ class ClassNamerOptionsDto {
 
   ClassNamerOptionsDto copyWithOptionsDto(ClassNamerOptionsDto options) {
     return copyWith(
+        includeMixinsMembers: options.includeMixinsMembers,
+        includeSuperMembers: options.includeSuperMembers,
         ignoreUtilities: options.ignoreUtilities,
         ignoreClassName: options.ignoreClassName,
         ignoreConstructors: options.ignoreConstructors,
@@ -36,6 +44,8 @@ class ClassNamerOptionsDto {
   }
 
   ClassNamerOptionsDto copyWith({
+    bool? includeMixinsMembers,
+    bool? includeSuperMembers,
     bool? ignoreUtilities,
     bool? ignoreClassName,
     bool? ignoreConstructors,
@@ -44,6 +54,8 @@ class ClassNamerOptionsDto {
     bool? ignoreFields,
   }) {
     return ClassNamerOptionsDto(
+      includeMixinsMembers: includeMixinsMembers ?? this.includeMixinsMembers,
+      includeSuperMembers: includeSuperMembers ?? this.includeSuperMembers,
       ignoreUtilities: ignoreUtilities ?? this.ignoreUtilities,
       ignoreClassName: ignoreClassName ?? this.ignoreClassName,
       ignoreConstructors: ignoreConstructors ?? this.ignoreConstructors,

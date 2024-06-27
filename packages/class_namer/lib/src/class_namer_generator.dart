@@ -30,6 +30,10 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
 
     element.visitChildren(visitor);
 
+    if (element is ClassElement) {
+      visitor.visitMixinsAnsSuperTypes(element);
+    }
+
     final processor = _serviceProvider.createCodeProcessor(
         visitor: visitor, options: options);
 
