@@ -12,6 +12,7 @@ dev_dependencies:
     git:
       url: https://git.urancompany.com/v.novykov/class_namer.git
       path: packages/class_namer
+      ref: main
 ```
 
 ## class_namer_annotation
@@ -26,4 +27,5 @@ dependencies:
     git:
       url: https://git.urancompany.com/v.novykov/class_namer.git
       path: packages/class_namer_annotation
+      ref: main
 ```
