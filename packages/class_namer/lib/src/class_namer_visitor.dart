@@ -11,6 +11,7 @@ import 'package:class_namer_annotation/class_namer_annotation.dart';
 /// An abstract class that defines the structure for visiting class elements
 /// and extracting their data.
 abstract class ClassNamerVisitor extends SimpleElementVisitor<void> {
+  /// The name of the class being visited.
   String get className;
 
   /// A map of constructor elements with their corresponding [ElementData].
@@ -29,10 +30,8 @@ abstract class ClassNamerVisitor extends SimpleElementVisitor<void> {
 class ImplClassNamerVisitor extends ClassNamerVisitor {
   final ClassNamerOptions _options;
 
-  String _className = '';
-
   @override
-  String get className => _className;
+  final String className;
 
   @override
   final constructors = <String, ElementData>{};
@@ -43,14 +42,10 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   @override
   final properties = <String, ElementData>{};
 
-  ImplClassNamerVisitor(this._options);
+  ImplClassNamerVisitor(this._options, this.className);
 
   @override
   void visitConstructorElement(ConstructorElement element) {
-    final String returnType = element.returnType.toString();
-
-    _className = returnType.cleanTypeFromServiceSymbols();
-
     constructors[element.name] =
         _getElementData(element, isIgnoreOption: _options.ignoreConstructors);
   }

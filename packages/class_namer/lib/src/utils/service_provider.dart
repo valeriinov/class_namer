@@ -21,8 +21,12 @@ class ServiceProvider {
   ///
   /// The [options] parameter specifies the configuration
   /// options for class naming.
-  ClassNamerVisitor createClassNamerVisitor(ClassNamerOptions options) {
-    return ImplClassNamerVisitor(options);
+  ///
+  /// The [className] parameter specifies the name of the class
+  /// that the visitor will process.
+  ClassNamerVisitor createClassNamerVisitor(
+      ClassNamerOptions options, String className) {
+    return ImplClassNamerVisitor(options, className);
   }
 
   /// Creates and returns an instance of [CodeProcessor] with the

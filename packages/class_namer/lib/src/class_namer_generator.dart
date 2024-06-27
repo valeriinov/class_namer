@@ -17,12 +17,16 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
     if (element.kind != ElementKind.CLASS && element.kind.name != 'MIXIN') {
       throw UnsupportedError("This is not a class (or mixin)!");
     }
+    if (element.name == null) {
+      throw UnsupportedError('Class or mixin element does not have a name!');
+    }
 
     final optionsHandler = _serviceProvider.getOptionsHandler();
 
     final options = optionsHandler.getOptions(annotation);
 
-    final visitor = _serviceProvider.createClassNamerVisitor(options);
+    final visitor =
+        _serviceProvider.createClassNamerVisitor(options, element.name!);
 
     element.visitChildren(visitor);
 
