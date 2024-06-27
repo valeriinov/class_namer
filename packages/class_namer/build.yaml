@@ -3,6 +3,11 @@ targets:
     builders:
       class_namer:
         enabled: true
+        generate_for:
+          exclude:
+            - test
+          include:
+            - test/integration/*
 
 builders:
   class_namer:
