@@ -1,5 +1,3 @@
-library class_namer;
-
 import 'package:build/build.dart';
 import 'package:class_namer/src/class_namer_generator.dart';
 import 'package:class_namer/src/utils/service_provider.dart';
