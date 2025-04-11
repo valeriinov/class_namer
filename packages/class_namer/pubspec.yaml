@@ -15,7 +15,7 @@ dependencies:
     git:
       url: https://github.com/valeriinov/class_namer.git
       path: packages/class_namer_annotation
-      ref: feature/update-dependencies
+      ref: main
 
 dev_dependencies:
   flutter_lints: ^5.0.0
