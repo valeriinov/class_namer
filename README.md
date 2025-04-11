@@ -10,7 +10,7 @@ dev_dependencies:
     sdk: flutter
   class_namer:
     git:
-      url: https://git.urancompany.com/v.novykov/class_namer.git
+      url: https://github.com/valeriinov/class_namer.git
       path: packages/class_namer
       ref: main
 ```
@@ -25,7 +25,7 @@ dependencies:
     sdk: flutter
   class_namer_annotation:
     git:
-      url: https://git.urancompany.com/v.novykov/class_namer.git
+      url: https://github.com/valeriinov/class_namer.git
       path: packages/class_namer_annotation
       ref: main
 ```
