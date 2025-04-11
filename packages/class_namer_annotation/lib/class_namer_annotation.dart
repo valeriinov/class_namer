@@ -1,5 +1,3 @@
-library class_namer_annotation;
-
 /// An annotation used to configure class naming options.
 ///
 /// Example:

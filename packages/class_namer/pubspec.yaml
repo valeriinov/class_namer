@@ -4,12 +4,12 @@ version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: ">=3.24.0"
 
 dependencies:
-  build: ^2.4.1
-  source_gen: ^1.5.0
+  build: ^2.4.2
+  source_gen: ^2.0.0
   analyzer: any
   class_namer_annotation:
     git:
@@ -18,9 +18,9 @@ dependencies:
       ref: main
 
 dev_dependencies:
-  flutter_lints: ^4.0.0
-  build_runner: ^2.4.11
-  source_gen_test: ^1.0.6
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.15
+  source_gen_test: ^1.1.1
   test: any
 
 # For information on the generic Dart part of this file, see the
