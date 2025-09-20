@@ -1,4 +1,4 @@
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:class_namer/src/utils/service_provider.dart';
 import 'package:class_namer_annotation/class_namer_annotation.dart';
@@ -13,30 +13,46 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
 
   @override
   generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) {
-    if (element.kind != ElementKind.CLASS && element.kind.name != 'MIXIN') {
-      throw UnsupportedError("This is not a class (or mixin)!");
-    }
-    if (element.name == null) {
-      throw UnsupportedError('Class or mixin element does not have a name!');
-    }
+    Element2 element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
+    _validateElement(element);
 
-    final optionsHandler = _serviceProvider.getOptionsHandler();
+    final name = _validateAndExtractName(element);
+    final options = _serviceProvider.getOptionsHandler().getOptions(annotation);
+    final visitor = _serviceProvider.createClassNamerVisitor(options, name);
 
-    final options = optionsHandler.getOptions(annotation);
+    if (element is InterfaceElement2) {
+      visitor.collectFrom(element);
 
-    final visitor =
-        _serviceProvider.createClassNamerVisitor(options, element.name!);
-
-    element.visitChildren(visitor);
-
-    if (element is ClassElement) {
-      visitor.visitMixinsAnsSuperTypes(element);
+      if (element is ClassElement2) {
+        visitor.visitMixinsAnsSuperTypes(element);
+      }
     }
 
     final processor = _serviceProvider.createCodeProcessor(
-        visitor: visitor, options: options);
-
+      visitor: visitor,
+      options: options,
+    );
     return processor.generateCode();
+  }
+
+  void _validateElement(Element2 element) {
+    if (element is ClassElement2 || element is MixinElement2) {
+      return;
+    }
+
+    throw UnsupportedError("This is not a class (or mixin)!");
+  }
+
+  String _validateAndExtractName(Element2 element) {
+    final name = element.name3;
+
+    if (name == null || name.isEmpty) {
+      throw UnsupportedError('Class/mixin has no name!');
+    }
+
+    return name;
   }
 }

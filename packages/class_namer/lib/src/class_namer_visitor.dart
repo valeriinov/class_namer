@@ -1,5 +1,5 @@
-import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/visitor.dart';
+import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/visitor2.dart';
 import 'package:class_namer/src/model/class_namer_options.dart';
 import 'package:class_namer/src/model/element_data.dart';
 import 'package:class_namer/src/model/property_data.dart';
@@ -10,7 +10,7 @@ import 'package:class_namer_annotation/class_namer_annotation.dart';
 
 /// An abstract class that defines the structure for visiting class elements
 /// and extracting their data.
-abstract class ClassNamerVisitor extends SimpleElementVisitor<void> {
+abstract class ClassNamerVisitor extends SimpleElementVisitor2<void> {
   /// The name of the class being visited.
   String get className;
 
@@ -26,11 +26,18 @@ abstract class ClassNamerVisitor extends SimpleElementVisitor<void> {
   /// A map of property elements with their corresponding [ElementData].
   Map<String, ElementData> get properties;
 
+  /// Collects and processes members from the given interface element.
+  ///
+  /// The [element] parameter specifies the interface element whose fields,
+  /// getters, setters, methods, and constructors should be visited and
+  /// collected into the corresponding maps.
+  void collectFrom(InterfaceElement2 element);
+
   /// Visits and processes mixins and super types of the given class element.
   ///
   /// The [element] parameter specifies the class element whose mixins and
   /// super types should be visited and processed.
-  void visitMixinsAnsSuperTypes(ClassElement element);
+  void visitMixinsAnsSuperTypes(ClassElement2 element);
 }
 
 class ImplClassNamerVisitor extends ClassNamerVisitor {
@@ -38,7 +45,6 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
 
   @override
   final String className;
-
   @override
   final constructors = <String, ElementData>{};
   @override
@@ -51,89 +57,181 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   ImplClassNamerVisitor(this._options, this.className);
 
   @override
-  void visitMixinsAnsSuperTypes(ClassElement element) {
+  void collectFrom(InterfaceElement2 element) {
+    _visitFields(element);
+    _visitGetters(element);
+    _visitSetters(element);
+    _visitMethods(element);
+    _visitConstructors(element);
+  }
+
+  @override
+  void visitMixinsAnsSuperTypes(ClassElement2 element) {
     _visitMixinsAndSupertypes(element);
   }
 
-  void _visitMixinsAndSupertypes(InterfaceElement element) {
-    if (_options.includeMixinsMembers) _visitMixins(element);
+  void _visitMixinsAndSupertypes(InterfaceElement2 element) {
+    if (_options.includeMixinsMembers) {
+      _visitMixins(element);
+    }
 
-    if (_options.includeSuperMembers) _visitSuperTypes(element);
-  }
-
-  void _visitMixins(InterfaceElement element) {
-    for (final mixin in element.mixins) {
-      _visitClassElement(mixin.element);
+    if (_options.includeSuperMembers) {
+      _visitSupers(element);
     }
   }
 
-  void _visitSuperTypes(InterfaceElement element) {
-    final superClass = element.supertype?.element;
-    if (superClass != null && superClass is ClassElement) {
-      _visitMixinsAndSupertypes(superClass);
-      _visitClassElement(superClass);
+  void _visitMixins(InterfaceElement2 element) {
+    for (final mixinType in element.mixins) {
+      final mixinElement = mixinType.element3;
+
+      collectFrom(mixinElement);
     }
   }
 
-  void _visitClassElement(InterfaceElement element) {
-    for (final field in element.fields) {
+  void _visitSupers(InterfaceElement2 element) {
+    final superElement = element.supertype?.element3;
+
+    if (superElement is ClassElement2) {
+      _visitMixinsAndSupertypes(superElement);
+      collectFrom(superElement);
+    }
+  }
+
+  void _visitFields(InterfaceElement2 element) {
+    for (final field in element.fields2) {
       visitFieldElement(field);
     }
+  }
 
-    for (final accessor in element.accessors) {
-      visitPropertyAccessorElement(accessor);
+  void _visitGetters(InterfaceElement2 element) {
+    for (final getter in element.getters2) {
+      visitGetterElement(getter);
     }
+  }
 
-    for (final method in element.methods) {
+  void _visitSetters(InterfaceElement2 element) {
+    for (final setter in element.setters2) {
+      visitSetterElement(setter);
+    }
+  }
+
+  void _visitMethods(InterfaceElement2 element) {
+    for (final method in element.methods2) {
       visitMethodElement(method);
     }
   }
 
-  @override
-  void visitConstructorElement(ConstructorElement element) {
-    constructors[element.name] =
-        _getElementData(element, isIgnoreOption: _options.ignoreConstructors);
+  void _visitConstructors(InterfaceElement2 element) {
+    for (final constructor in element.constructors2) {
+      if (_isUnnamedConstructor(element, constructor)) {
+        continue;
+      }
+
+      visitConstructorElement(constructor);
+    }
   }
 
   @override
-  void visitFieldElement(FieldElement element) {
-    if (element.isSynthetic) return;
+  void visitConstructorElement(ConstructorElement2 element) {
+    final data = _getData(element, _options.ignoreConstructors);
 
-    fields[element.name] =
-        _getElementData(element, isIgnoreOption: _options.ignoreFields);
+    constructors[_clean(_validateAndExtractName(element))] = data;
   }
 
   @override
-  void visitPropertyAccessorElement(PropertyAccessorElement element) {
-    if (element.isSynthetic) return;
-
-    properties[element.name] = PropertyData.fromElementData(
-        _getElementData(element, isIgnoreOption: _options.ignoreProperties),
-        isSetter: element.isSetter);
-  }
-
-  @override
-  void visitMethodElement(MethodElement element) {
-    functions[element.name] =
-        _getElementData(element, isIgnoreOption: _options.ignoreMethods);
-  }
-
-  ElementData _getElementData(Element element, {required bool isIgnoreOption}) {
-    if (element.name == null) {
-      throw UnsupportedError('Element does not have a name!');
+  void visitFieldElement(FieldElement2 element) {
+    if (element.isSynthetic) {
+      return;
     }
 
-    String? name = element.name!.cleanNameFromServiceSymbols();
+    final data = _getData(element, _options.ignoreFields);
 
-    final isPrivate = element.name!.startsWith('_');
-    final isIgnore = _isIgnore(element, name, isIgnoreOption);
+    fields[_clean(_validateAndExtractName(element))] = data;
+  }
+
+  @override
+  void visitGetterElement(GetterElement element) {
+    if (element.isSynthetic) {
+      return;
+    }
+
+    final data = _getData(element, _options.ignoreProperties);
+
+    properties[_clean(_validateAndExtractName(element))] =
+        PropertyData.fromElementData(data, isSetter: false);
+  }
+
+  @override
+  void visitSetterElement(SetterElement element) {
+    if (element.isSynthetic) {
+      return;
+    }
+
+    final data = _getData(element, _options.ignoreProperties);
+
+    properties[_clean(_validateAndExtractName(element))] =
+        PropertyData.fromElementData(data, isSetter: true);
+  }
+
+  @override
+  void visitMethodElement(MethodElement2 element) {
+    final data = _getData(element, _options.ignoreMethods);
+
+    functions[_clean(_validateAndExtractName(element))] = data;
+  }
+
+  bool _isUnnamedConstructor(
+    InterfaceElement2 owner,
+    ConstructorElement2 constructor,
+  ) {
+    if (_isOwnerUnnamedConstructor(owner, constructor)) {
+      return true;
+    }
+
+    return switch (constructor.name3) {
+      null => true,
+      '' => true,
+      'new' => true,
+      _ => false,
+    };
+  }
+
+  bool _isOwnerUnnamedConstructor(
+    InterfaceElement2 owner,
+    ConstructorElement2 constructor,
+  ) {
+    if (owner is! ClassElement2) {
+      return false;
+    }
+
+    return identical(owner.unnamedConstructor2, constructor);
+  }
+
+  ElementData _getData(Element2 element, bool isIgnoreOption) {
+    final name = _clean(_validateAndExtractName(element));
+    final isPrivate = name.startsWith('_');
+    final isIgnore = _shouldIgnore(element, name, isIgnoreOption);
 
     return ElementData(name: name, isPrivate: isPrivate, isIgnore: isIgnore);
   }
 
-  bool _isIgnore(Element element, String name, bool isIgnoreOption) {
-    return element.hasAnnotation(ClassNamerIgnore) ||
-        name.isEmpty ||
+  String _validateAndExtractName(Element2 element) {
+    final name = element.name3;
+
+    if (name == null || name.isEmpty) {
+      throw UnsupportedError('Element does not have a name!');
+    }
+
+    return name;
+  }
+
+  String _clean(String raw) {
+    return raw.cleanNameFromServiceSymbols();
+  }
+
+  bool _shouldIgnore(Element2 element, String name, bool isIgnoreOption) {
+    return name.isEmpty ||
+        element.hasAnnotation(ClassNamerIgnore) ||
         (_options.ignoreUtilities && name.isUtilityName) ||
         isIgnoreOption;
   }
