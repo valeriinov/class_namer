@@ -1,6 +1,6 @@
 name: class_namer
 description: "Generates classes with text representations of field names and properties."
-version: 0.1.1
+version: 0.1.2
 publish_to: none
 
 environment:
@@ -10,12 +10,12 @@ environment:
 dependencies:
   build: ^4.0.3
   source_gen: ^4.1.1
-  analyzer: ^9.0.0
+  analyzer: ">=8.2.0 <9.0.0"
   class_namer_annotation:
     git:
       url: https://github.com/valeriinov/class_namer.git
       path: packages/class_namer_annotation
-      ref: 0.1.0
+      ref: 0.1.2
 
 dev_dependencies:
   flutter_lints: ^6.0.0
