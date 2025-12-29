@@ -22,12 +22,13 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
     final name = _validateAndExtractName(element);
     final options = _serviceProvider.getOptionsHandler().getOptions(annotation);
     final visitor = _serviceProvider.createClassNamerVisitor(options, name);
-    final interfaceElement = element as InterfaceElement;
 
-    visitor.collectFrom(interfaceElement);
+    if (element is InterfaceElement) {
+      visitor.collectFrom(element);
 
-    if (interfaceElement is ClassElement) {
-      visitor.visitMixinsAnsSuperTypes(interfaceElement);
+      if (element is ClassElement) {
+        visitor.visitMixinsAnsSuperTypes(element);
+      }
     }
 
     final processor = _serviceProvider.createCodeProcessor(
