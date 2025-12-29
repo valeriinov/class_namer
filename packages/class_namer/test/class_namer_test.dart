@@ -74,8 +74,12 @@ void _invalidateGeneratedFile() {
 }
 
 Future<void> _runBuildRunner() async {
-  final result = await Process.run(
-      'dart', ['run', 'build_runner', 'build', '--delete-conflicting-outputs']);
+  final result = await Process.run('dart', [
+    'run',
+    'build_runner',
+    'build',
+    '--delete-conflicting-outputs',
+  ]);
 
   expect(result.exitCode, 0, reason: 'build_runner did not run successfully');
 }
@@ -83,6 +87,9 @@ Future<void> _runBuildRunner() async {
 void _testGeneratedFileExist() {
   final generatedFile = File(_generatedFilePath);
 
-  expect(generatedFile.existsSync(), isTrue,
-      reason: 'Generated file does not exist');
+  expect(
+    generatedFile.existsSync(),
+    isTrue,
+    reason: 'Generated file does not exist',
+  );
 }

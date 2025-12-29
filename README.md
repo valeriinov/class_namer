@@ -12,7 +12,7 @@ dev_dependencies:
     git:
       url: https://github.com/valeriinov/class_namer.git
       path: packages/class_namer
-      ref: 0.1.0
+      ref: 0.1.1
 ```
 
 ## class_namer_annotation
@@ -27,5 +27,5 @@ dependencies:
     git:
       url: https://github.com/valeriinov/class_namer.git
       path: packages/class_namer_annotation
-      ref: 0.1.0
+      ref: 0.1.1
 ```

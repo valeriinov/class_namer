@@ -18,10 +18,11 @@ class OptionsHandler {
   ///
   /// The [mapper] parameter is an instance of [OptionsMapper] to handle the
   /// mapping of options.
-  OptionsHandler(
-      {required Map<String, dynamic> initConfig, required OptionsMapper mapper})
-      : _initConfig = initConfig,
-        _mapper = mapper;
+  OptionsHandler({
+    required Map<String, dynamic> initConfig,
+    required OptionsMapper mapper,
+  }) : _initConfig = initConfig,
+       _mapper = mapper;
 
   /// Retrieves and merges configuration options from build.yaml and annotation.
   ///
@@ -35,8 +36,8 @@ class OptionsHandler {
     final initOptionsDto = ClassNamerOptionsDto.fromMap(_initConfig);
 
     // Options from annotation.
-    final annotationOptionsDto =
-        _mapper.mapConstantReaderToClassNamerOptionsDto(annotation);
+    final annotationOptionsDto = _mapper
+        .mapConstantReaderToClassNamerOptionsDto(annotation);
 
     // Merge options, annotation overrides build.yaml.
     final optionsDto = initOptionsDto.copyWithOptionsDto(annotationOptionsDto);

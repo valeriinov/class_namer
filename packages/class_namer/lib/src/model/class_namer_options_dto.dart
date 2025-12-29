@@ -8,15 +8,16 @@ class ClassNamerOptionsDto {
   final bool? ignoreProperties;
   final bool? ignoreFields;
 
-  const ClassNamerOptionsDto(
-      {this.includeMixinsMembers,
-      this.includeSuperMembers,
-      this.ignoreUtilities,
-      this.ignoreClassName,
-      this.ignoreConstructors,
-      this.ignoreMethods,
-      this.ignoreFields,
-      this.ignoreProperties});
+  const ClassNamerOptionsDto({
+    this.includeMixinsMembers,
+    this.includeSuperMembers,
+    this.ignoreUtilities,
+    this.ignoreClassName,
+    this.ignoreConstructors,
+    this.ignoreMethods,
+    this.ignoreFields,
+    this.ignoreProperties,
+  });
 
   factory ClassNamerOptionsDto.fromMap(Map<String, dynamic> map) {
     return ClassNamerOptionsDto(
@@ -33,14 +34,15 @@ class ClassNamerOptionsDto {
 
   ClassNamerOptionsDto copyWithOptionsDto(ClassNamerOptionsDto options) {
     return copyWith(
-        includeMixinsMembers: options.includeMixinsMembers,
-        includeSuperMembers: options.includeSuperMembers,
-        ignoreUtilities: options.ignoreUtilities,
-        ignoreClassName: options.ignoreClassName,
-        ignoreConstructors: options.ignoreConstructors,
-        ignoreMethods: options.ignoreMethods,
-        ignoreProperties: options.ignoreProperties,
-        ignoreFields: options.ignoreFields);
+      includeMixinsMembers: options.includeMixinsMembers,
+      includeSuperMembers: options.includeSuperMembers,
+      ignoreUtilities: options.ignoreUtilities,
+      ignoreClassName: options.ignoreClassName,
+      ignoreConstructors: options.ignoreConstructors,
+      ignoreMethods: options.ignoreMethods,
+      ignoreProperties: options.ignoreProperties,
+      ignoreFields: options.ignoreFields,
+    );
   }
 
   ClassNamerOptionsDto copyWith({

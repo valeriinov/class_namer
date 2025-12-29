@@ -1,13 +1,13 @@
 import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// A utility function that creates a [TypeChecker] for the given [type].
 TypeChecker _typeChecker(final Type type) => TypeChecker.typeNamed(type);
 
-/// An extension on [Element2] to provide convenient methods for
+/// An extension on [Element] to provide convenient methods for
 /// working with annotations.
-extension AnnotationManager on Element2 {
+extension AnnotationManager on Element {
   /// Whether the element has an annotation of the specified [type].
   ///
   /// The [type] parameter specifies the type of the annotation to look for.
