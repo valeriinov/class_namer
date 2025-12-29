@@ -8,15 +8,16 @@ class ClassNamerOptions {
   final bool ignoreProperties;
   final bool ignoreFields;
 
-  const ClassNamerOptions(
-      {this.includeMixinsMembers = true,
-      this.includeSuperMembers = true,
-      this.ignoreUtilities = true,
-      this.ignoreClassName = true,
-      this.ignoreConstructors = true,
-      this.ignoreMethods = true,
-      this.ignoreFields = false,
-      this.ignoreProperties = false});
+  const ClassNamerOptions({
+    this.includeMixinsMembers = true,
+    this.includeSuperMembers = true,
+    this.ignoreUtilities = true,
+    this.ignoreClassName = true,
+    this.ignoreConstructors = true,
+    this.ignoreMethods = true,
+    this.ignoreFields = false,
+    this.ignoreProperties = false,
+  });
 
   ClassNamerOptions copyWith({
     bool? includeMixinsMembers,

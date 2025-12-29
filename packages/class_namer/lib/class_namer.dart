@@ -8,8 +8,10 @@ import 'package:source_gen/source_gen.dart';
 /// Builds generators for `build_runner` to run
 Builder classNamer(BuilderOptions options) {
   final mapper = OptionsMapper();
-  final optionsHandler =
-      OptionsHandler(initConfig: options.config, mapper: mapper);
+  final optionsHandler = OptionsHandler(
+    initConfig: options.config,
+    mapper: mapper,
+  );
   final serviceProvider = ServiceProvider(optionsHandler);
 
   return PartBuilder(

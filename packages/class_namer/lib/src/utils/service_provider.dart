@@ -25,7 +25,9 @@ class ServiceProvider {
   /// The [className] parameter specifies the name of the class
   /// that the visitor will process.
   ClassNamerVisitor createClassNamerVisitor(
-      ClassNamerOptions options, String className) {
+    ClassNamerOptions options,
+    String className,
+  ) {
     return ImplClassNamerVisitor(options, className);
   }
 
@@ -37,9 +39,10 @@ class ServiceProvider {
   ///
   /// The [options] parameter specifies the configuration
   /// options for class naming.
-  CodeProcessor createCodeProcessor(
-      {required ClassNamerVisitor visitor,
-      required ClassNamerOptions options}) {
+  CodeProcessor createCodeProcessor({
+    required ClassNamerVisitor visitor,
+    required ClassNamerOptions options,
+  }) {
     return ImplCodeProcessor(visitor: visitor, options: options);
   }
 }

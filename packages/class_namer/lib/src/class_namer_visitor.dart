@@ -1,4 +1,4 @@
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/visitor2.dart';
 import 'package:class_namer/src/model/class_namer_options.dart';
 import 'package:class_namer/src/model/element_data.dart';
@@ -31,13 +31,13 @@ abstract class ClassNamerVisitor extends SimpleElementVisitor2<void> {
   /// The [element] parameter specifies the interface element whose fields,
   /// getters, setters, methods, and constructors should be visited and
   /// collected into the corresponding maps.
-  void collectFrom(InterfaceElement2 element);
+  void collectFrom(InterfaceElement element);
 
   /// Visits and processes mixins and super types of the given class element.
   ///
   /// The [element] parameter specifies the class element whose mixins and
   /// super types should be visited and processed.
-  void visitMixinsAnsSuperTypes(ClassElement2 element);
+  void visitMixinsAnsSuperTypes(ClassElement element);
 }
 
 class ImplClassNamerVisitor extends ClassNamerVisitor {
@@ -57,7 +57,7 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   ImplClassNamerVisitor(this._options, this.className);
 
   @override
-  void collectFrom(InterfaceElement2 element) {
+  void collectFrom(InterfaceElement element) {
     _visitFields(element);
     _visitGetters(element);
     _visitSetters(element);
@@ -66,11 +66,11 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   }
 
   @override
-  void visitMixinsAnsSuperTypes(ClassElement2 element) {
+  void visitMixinsAnsSuperTypes(ClassElement element) {
     _visitMixinsAndSupertypes(element);
   }
 
-  void _visitMixinsAndSupertypes(InterfaceElement2 element) {
+  void _visitMixinsAndSupertypes(InterfaceElement element) {
     if (_options.includeMixinsMembers) {
       _visitMixins(element);
     }
@@ -80,49 +80,49 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
     }
   }
 
-  void _visitMixins(InterfaceElement2 element) {
+  void _visitMixins(InterfaceElement element) {
     for (final mixinType in element.mixins) {
-      final mixinElement = mixinType.element3;
+      final mixinElement = mixinType.element;
 
       collectFrom(mixinElement);
     }
   }
 
-  void _visitSupers(InterfaceElement2 element) {
-    final superElement = element.supertype?.element3;
+  void _visitSupers(InterfaceElement element) {
+    final superElement = element.supertype?.element;
 
-    if (superElement is ClassElement2) {
+    if (superElement is ClassElement) {
       _visitMixinsAndSupertypes(superElement);
       collectFrom(superElement);
     }
   }
 
-  void _visitFields(InterfaceElement2 element) {
-    for (final field in element.fields2) {
+  void _visitFields(InterfaceElement element) {
+    for (final field in element.fields) {
       visitFieldElement(field);
     }
   }
 
-  void _visitGetters(InterfaceElement2 element) {
-    for (final getter in element.getters2) {
+  void _visitGetters(InterfaceElement element) {
+    for (final getter in element.getters) {
       visitGetterElement(getter);
     }
   }
 
-  void _visitSetters(InterfaceElement2 element) {
-    for (final setter in element.setters2) {
+  void _visitSetters(InterfaceElement element) {
+    for (final setter in element.setters) {
       visitSetterElement(setter);
     }
   }
 
-  void _visitMethods(InterfaceElement2 element) {
-    for (final method in element.methods2) {
+  void _visitMethods(InterfaceElement element) {
+    for (final method in element.methods) {
       visitMethodElement(method);
     }
   }
 
-  void _visitConstructors(InterfaceElement2 element) {
-    for (final constructor in element.constructors2) {
+  void _visitConstructors(InterfaceElement element) {
+    for (final constructor in element.constructors) {
       if (_isUnnamedConstructor(element, constructor)) {
         continue;
       }
@@ -132,14 +132,14 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   }
 
   @override
-  void visitConstructorElement(ConstructorElement2 element) {
+  void visitConstructorElement(ConstructorElement element) {
     final data = _getData(element, _options.ignoreConstructors);
 
     constructors[_clean(_validateAndExtractName(element))] = data;
   }
 
   @override
-  void visitFieldElement(FieldElement2 element) {
+  void visitFieldElement(FieldElement element) {
     if (element.isSynthetic) {
       return;
     }
@@ -174,21 +174,21 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   }
 
   @override
-  void visitMethodElement(MethodElement2 element) {
+  void visitMethodElement(MethodElement element) {
     final data = _getData(element, _options.ignoreMethods);
 
     functions[_clean(_validateAndExtractName(element))] = data;
   }
 
   bool _isUnnamedConstructor(
-    InterfaceElement2 owner,
-    ConstructorElement2 constructor,
+    InterfaceElement owner,
+    ConstructorElement constructor,
   ) {
     if (_isOwnerUnnamedConstructor(owner, constructor)) {
       return true;
     }
 
-    return switch (constructor.name3) {
+    return switch (constructor.name) {
       null => true,
       '' => true,
       'new' => true,
@@ -197,17 +197,17 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
   }
 
   bool _isOwnerUnnamedConstructor(
-    InterfaceElement2 owner,
-    ConstructorElement2 constructor,
+    InterfaceElement owner,
+    ConstructorElement constructor,
   ) {
-    if (owner is! ClassElement2) {
+    if (owner is! ClassElement) {
       return false;
     }
 
-    return identical(owner.unnamedConstructor2, constructor);
+    return identical(owner.unnamedConstructor, constructor);
   }
 
-  ElementData _getData(Element2 element, bool isIgnoreOption) {
+  ElementData _getData(Element element, bool isIgnoreOption) {
     final name = _clean(_validateAndExtractName(element));
     final isPrivate = name.startsWith('_');
     final isIgnore = _shouldIgnore(element, name, isIgnoreOption);
@@ -215,8 +215,8 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
     return ElementData(name: name, isPrivate: isPrivate, isIgnore: isIgnore);
   }
 
-  String _validateAndExtractName(Element2 element) {
-    final name = element.name3;
+  String _validateAndExtractName(Element element) {
+    final name = element.name;
 
     if (name == null || name.isEmpty) {
       throw UnsupportedError('Element does not have a name!');
@@ -229,7 +229,7 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
     return raw.cleanNameFromServiceSymbols();
   }
 
-  bool _shouldIgnore(Element2 element, String name, bool isIgnoreOption) {
+  bool _shouldIgnore(Element element, String name, bool isIgnoreOption) {
     return name.isEmpty ||
         element.hasAnnotation(ClassNamerIgnore) ||
         (_options.ignoreUtilities && name.isUtilityName) ||

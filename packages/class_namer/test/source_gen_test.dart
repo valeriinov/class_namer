@@ -5,10 +5,11 @@ import 'package:class_namer/src/utils/service_provider.dart';
 import 'package:class_namer_annotation/class_namer_annotation.dart';
 import 'package:source_gen_test/source_gen_test.dart';
 
-
 Future<void> main() async {
-  final reader =
-      await initializeLibraryReaderForDirectory('test', 'source_gen_src.dart');
+  final reader = await initializeLibraryReaderForDirectory(
+    'test',
+    'source_gen_src.dart',
+  );
 
   initializeBuildLogTracking();
 
@@ -17,5 +18,7 @@ Future<void> main() async {
   final serviceProvider = ServiceProvider(optionsHandler);
 
   testAnnotatedElements<ClassNamer>(
-      reader, ClassNamerGenerator(serviceProvider));
+    reader,
+    ClassNamerGenerator(serviceProvider),
+  );
 }

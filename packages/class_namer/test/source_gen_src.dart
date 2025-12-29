@@ -114,14 +114,15 @@ class User7Names {
 }
 ''')
 @ClassNamer(
-    includeMixinsMembers: true,
-    includeSuperMembers: true,
-    ignoreUtilities: false,
-    ignoreClassName: false,
-    ignoreConstructors: false,
-    ignoreMethods: false,
-    ignoreFields: false,
-    ignoreProperties: false)
+  includeMixinsMembers: true,
+  includeSuperMembers: true,
+  ignoreUtilities: false,
+  ignoreClassName: false,
+  ignoreConstructors: false,
+  ignoreMethods: false,
+  ignoreFields: false,
+  ignoreProperties: false,
+)
 class User7 extends SuperUser with InfoMixin {
   final String phone = '';
 

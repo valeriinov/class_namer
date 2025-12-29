@@ -10,9 +10,12 @@ class OptionsMapper {
   ///
   /// Returns a [ClassNamerOptionsDto] containing the mapped options.
   ClassNamerOptionsDto mapConstantReaderToClassNamerOptionsDto(
-      ConstantReader reader) {
-    final includeMixinsMembers =
-        _getOptionValue('includeMixinsMembers', reader);
+    ConstantReader reader,
+  ) {
+    final includeMixinsMembers = _getOptionValue(
+      'includeMixinsMembers',
+      reader,
+    );
     final includeSuperMembers = _getOptionValue('includeSuperMembers', reader);
     final ignoreUtilities = _getOptionValue('ignoreUtilities', reader);
     final ignoreClassName = _getOptionValue('ignoreClassName', reader);
@@ -22,14 +25,15 @@ class OptionsMapper {
     final ignoreProperties = _getOptionValue('ignoreProperties', reader);
 
     return ClassNamerOptionsDto(
-        includeMixinsMembers: includeMixinsMembers,
-        includeSuperMembers: includeSuperMembers,
-        ignoreUtilities: ignoreUtilities,
-        ignoreClassName: ignoreClassName,
-        ignoreConstructors: ignoreConstructors,
-        ignoreMethods: ignoreMethods,
-        ignoreFields: ignoreFields,
-        ignoreProperties: ignoreProperties);
+      includeMixinsMembers: includeMixinsMembers,
+      includeSuperMembers: includeSuperMembers,
+      ignoreUtilities: ignoreUtilities,
+      ignoreClassName: ignoreClassName,
+      ignoreConstructors: ignoreConstructors,
+      ignoreMethods: ignoreMethods,
+      ignoreFields: ignoreFields,
+      ignoreProperties: ignoreProperties,
+    );
   }
 
   bool? _getOptionValue(String fieldName, ConstantReader reader) {
@@ -50,17 +54,19 @@ class OptionsMapper {
   ///
   /// Returns a [ClassNamerOptions] instance with the mapped options.
   ClassNamerOptions mapClassNameOptionsDtoToClassNameOptions(
-      ClassNamerOptionsDto dto) {
+    ClassNamerOptionsDto dto,
+  ) {
     const defaultOptions = ClassNamerOptions();
 
     return defaultOptions.copyWith(
-        includeMixinsMembers: dto.includeMixinsMembers,
-        includeSuperMembers: dto.includeSuperMembers,
-        ignoreUtilities: dto.ignoreUtilities,
-        ignoreClassName: dto.ignoreClassName,
-        ignoreConstructors: dto.ignoreConstructors,
-        ignoreMethods: dto.ignoreMethods,
-        ignoreProperties: dto.ignoreProperties,
-        ignoreFields: dto.ignoreFields);
+      includeMixinsMembers: dto.includeMixinsMembers,
+      includeSuperMembers: dto.includeSuperMembers,
+      ignoreUtilities: dto.ignoreUtilities,
+      ignoreClassName: dto.ignoreClassName,
+      ignoreConstructors: dto.ignoreConstructors,
+      ignoreMethods: dto.ignoreMethods,
+      ignoreProperties: dto.ignoreProperties,
+      ignoreFields: dto.ignoreFields,
+    );
   }
 }

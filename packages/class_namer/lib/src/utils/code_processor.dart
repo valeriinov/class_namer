@@ -17,10 +17,11 @@ class ImplCodeProcessor implements CodeProcessor {
   final ClassNamerVisitor _visitor;
   StringBuffer _buffer = StringBuffer();
 
-  ImplCodeProcessor(
-      {required ClassNamerVisitor visitor, required ClassNamerOptions options})
-      : _options = options,
-        _visitor = visitor;
+  ImplCodeProcessor({
+    required ClassNamerVisitor visitor,
+    required ClassNamerOptions options,
+  }) : _options = options,
+       _visitor = visitor;
 
   @override
   String generateCode() {
@@ -33,7 +34,8 @@ class ImplCodeProcessor implements CodeProcessor {
     final classContainerName = '${_visitor.className}Names';
 
     _buffer.writeln(
-        '/// Container for names of elements belonging to the [${_visitor.className}] class');
+      '/// Container for names of elements belonging to the [${_visitor.className}] class',
+    );
     _buffer.writeln('class $classContainerName {');
 
     _writeConstructor(classContainerName);
@@ -67,8 +69,10 @@ class ImplCodeProcessor implements CodeProcessor {
   }
 
   List<Iterable<String>> _generateNames() {
-    final constructorNames =
-        _getCodeParts('constructor', _visitor.constructors.values);
+    final constructorNames = _getCodeParts(
+      'constructor',
+      _visitor.constructors.values,
+    );
 
     final fieldNames = _getCodeParts('field', _visitor.fields.values);
 
@@ -80,7 +84,9 @@ class ImplCodeProcessor implements CodeProcessor {
   }
 
   Iterable<String> _getCodeParts(
-      String elementType, Iterable<ElementData> elements) {
+    String elementType,
+    Iterable<ElementData> elements,
+  ) {
     final filteredNames = _getFilteredNames(elements);
 
     return filteredNames.map((elData) {

@@ -1,4 +1,4 @@
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:class_namer/src/utils/service_provider.dart';
 import 'package:class_namer_annotation/class_namer_annotation.dart';
@@ -13,7 +13,7 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
 
   @override
   generateForAnnotatedElement(
-    Element2 element,
+    Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
@@ -22,13 +22,12 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
     final name = _validateAndExtractName(element);
     final options = _serviceProvider.getOptionsHandler().getOptions(annotation);
     final visitor = _serviceProvider.createClassNamerVisitor(options, name);
+    final interfaceElement = element as InterfaceElement;
 
-    if (element is InterfaceElement2) {
-      visitor.collectFrom(element);
+    visitor.collectFrom(interfaceElement);
 
-      if (element is ClassElement2) {
-        visitor.visitMixinsAnsSuperTypes(element);
-      }
+    if (interfaceElement is ClassElement) {
+      visitor.visitMixinsAnsSuperTypes(interfaceElement);
     }
 
     final processor = _serviceProvider.createCodeProcessor(
@@ -38,16 +37,16 @@ class ClassNamerGenerator extends GeneratorForAnnotation<ClassNamer> {
     return processor.generateCode();
   }
 
-  void _validateElement(Element2 element) {
-    if (element is ClassElement2 || element is MixinElement2) {
+  void _validateElement(Element element) {
+    if (element is ClassElement || element is MixinElement) {
       return;
     }
 
     throw UnsupportedError("This is not a class (or mixin)!");
   }
 
-  String _validateAndExtractName(Element2 element) {
-    final name = element.name3;
+  String _validateAndExtractName(Element element) {
+    final name = element.name;
 
     if (name == null || name.isEmpty) {
       throw UnsupportedError('Class/mixin has no name!');

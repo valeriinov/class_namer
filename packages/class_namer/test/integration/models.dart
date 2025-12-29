@@ -17,11 +17,12 @@ class User {
 }
 
 @ClassNamer(
-    ignoreClassName: false,
-    ignoreMethods: false,
-    ignoreProperties: false,
-    ignoreConstructors: false,
-    ignoreUtilities: false)
+  ignoreClassName: false,
+  ignoreMethods: false,
+  ignoreProperties: false,
+  ignoreConstructors: false,
+  ignoreUtilities: false,
+)
 class User2 extends UserBase with InfoMixin2 {
   final String name;
   final String email;

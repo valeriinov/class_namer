@@ -3,6 +3,9 @@ class ElementData {
   final bool isPrivate;
   final bool isIgnore;
 
-  ElementData(
-      {required this.name, required this.isPrivate, this.isIgnore = false});
+  ElementData({
+    required this.name,
+    required this.isPrivate,
+    this.isIgnore = false,
+  });
 }

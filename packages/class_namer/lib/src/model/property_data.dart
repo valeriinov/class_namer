@@ -5,18 +5,22 @@ class PropertyData extends ElementData {
 
   String get propertyPrefix => isSetter ? 'Set' : 'Get';
 
-  PropertyData(
-      {required super.name,
-      required super.isPrivate,
-      super.isIgnore,
-      required this.isSetter});
+  PropertyData({
+    required super.name,
+    required super.isPrivate,
+    super.isIgnore,
+    required this.isSetter,
+  });
 
-  factory PropertyData.fromElementData(ElementData data,
-      {required bool isSetter}) {
+  factory PropertyData.fromElementData(
+    ElementData data, {
+    required bool isSetter,
+  }) {
     return PropertyData(
-        name: data.name,
-        isIgnore: data.isIgnore,
-        isPrivate: data.isPrivate,
-        isSetter: isSetter);
+      name: data.name,
+      isIgnore: data.isIgnore,
+      isPrivate: data.isPrivate,
+      isSetter: isSetter,
+    );
   }
 }
