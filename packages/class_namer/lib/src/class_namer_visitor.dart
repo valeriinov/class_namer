@@ -140,7 +140,7 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
 
   @override
   void visitFieldElement(FieldElement element) {
-    if (element.isSynthetic) {
+    if (element.isOriginGetterSetter) {
       return;
     }
 
@@ -151,7 +151,7 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
 
   @override
   void visitGetterElement(GetterElement element) {
-    if (element.isSynthetic) {
+    if (element.isOriginVariable) {
       return;
     }
 
@@ -163,7 +163,7 @@ class ImplClassNamerVisitor extends ClassNamerVisitor {
 
   @override
   void visitSetterElement(SetterElement element) {
-    if (element.isSynthetic) {
+    if (element.isOriginVariable) {
       return;
     }
 

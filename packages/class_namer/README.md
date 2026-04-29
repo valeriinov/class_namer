@@ -12,8 +12,8 @@ typical [build_runner](https://pub.dev/packages/build_runner) code-generator set
 steps:
 
 1. Install [build_runner](https://pub.dev/packages/build_runner).
-2. Add `class_namer`as a dev dependency and `class_namer_annotation` as a dependency
-   [ in your pubspec.yaml file](https://docs.flutter.dev/development/packages-and-plugins/using-packages).
+2. Add `class_namer` as a dev dependency and `class_namer_annotation` as a dependency
+   [in your pubspec.yaml file](https://docs.flutter.dev/packages-and-plugins/using-packages).
 3. Run `flutter pub get` to install the package.
 
 ## Usage
@@ -156,7 +156,6 @@ targets:
           ignoreFields: false
           ignoreProperties: false
 ```
-
 
 
 
