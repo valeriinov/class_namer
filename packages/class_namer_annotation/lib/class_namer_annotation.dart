@@ -58,15 +58,16 @@ class ClassNamer {
   final bool? ignoreFields;
 
   /// Creates an instance of [ClassNamer] with the given configuration options.
-  const ClassNamer(
-      {this.includeMixinsMembers,
-      this.includeSuperMembers,
-      this.ignoreUtilities,
-      this.ignoreClassName,
-      this.ignoreConstructors,
-      this.ignoreMethods,
-      this.ignoreFields,
-      this.ignoreProperties});
+  const ClassNamer({
+    this.includeMixinsMembers,
+    this.includeSuperMembers,
+    this.ignoreUtilities,
+    this.ignoreClassName,
+    this.ignoreConstructors,
+    this.ignoreMethods,
+    this.ignoreFields,
+    this.ignoreProperties,
+  });
 }
 
 /// An annotation used to mark a class, method, or field to be ignored by naming.
@@ -100,7 +101,7 @@ class ClassNamerIgnore {
 ///
 /// part 'user.names.dart';
 ///
-/// @сlassNamer
+/// @classNamer
 /// class User {
 ///   final String name;
 ///   final String email;
@@ -120,7 +121,7 @@ const classNamer = ClassNamer();
 ///
 /// part 'user.names.dart';
 ///
-/// @сlassNamer
+/// @classNamer
 /// class User {
 ///   @classNamerIgnore
 ///   final String name;
