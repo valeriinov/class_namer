@@ -11,7 +11,7 @@ dependencies:
     git:
       url: https://github.com/valeriinov/class_namer.git
       path: packages/class_namer_annotation
-      ref: 0.2.0
+      ref: 0.2.1
 ```
 
 Import the annotations from your model file:
