@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Bumped package version to 0.2.1 for class_namer 0.2.1 compatibility.
+
 ## 0.2.0
 
 * Updated the package version and Dart SDK lower bound for class_namer 0.2.0 compatibility.
